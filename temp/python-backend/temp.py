@@ -1,52 +1,88 @@
 import os
 
+from anytree import Node, RenderTree
+from anytree.exporter import JsonExporter
 
+def numberToAction(latestNode):
+	if latestNode == '0':
+		return 'fold'
+	if latestNode == '1':
+		return 'limp'
+	if latestNode[:2] == '40':
+		return 'raise ' + str(latestNode[2:])
 
+	return latestNode
+
+#inits, vars
+range = 'AK+ QQ'
+root = Node("root", id = 'root')
+nodeDict = {}
 dir = './20bb'
+txtDataDict = {}
 
+#get file names & data
 filenames = []
 for fn in os.listdir(dir):
     filenames.append(fn)
 
+    f = open(dir+'/'+fn, "r")
 
-'''
-Just split each path by its delimiter and then add them to a tree structure one by one.
-i.e. if 'x1' does not exist create this node, if it does exist go to it and check if there is a
- child 'x2' and so on..
-'''
-
-data = {
-	'id': 'parent-node',
-	'nodes': []
-}
+    txtDataDict[fn.strip(".rng")] = f.read()
+    f.close()
 
 
-range = 'AK+ QQ'
-
-def getparentIdx(data, parentNodes, currentDepth, depth)
-	for i in range(len(data['nodes']))
-
+#looppaa jokainen node, jokaisen noden uniikki id lista nykyisestä kohtaa pelipuuta, esim ["0", "1"]
 for fn in sorted(filenames, key=lambda fn: len(fn.split('.'))):
     
-    strippedFn = fn.strip(".rng").split('.')
-    print(strippedFn)
-    parentNodes = strippedFn[:-1]
-    currentNode = strippedFn[-1]
+    fn = fn.strip(".rng")
+    latestNode = fn.split('.')[-1]
+    # strippedFn = fn.strip(".rng").split('.')    
+    # parentNodes = strippedFn[:-1]
+    # currentNode = strippedFn[-1]
 
-    # jos ei vanhempia - parent nodeen
-    if (len(parentNodes) == 0):
-    	data['nodes'].append({'id': currentNode, 'range': range, 'children': []})
+    #jos eka pelaaja -> parent nodeksi 'root'
+    if len(fn.split('.')) <= 1:
+    	newNode = Node(numberToAction(latestNode), id=fn, data=txtDataDict[fn], parent=root)
+    #muuten parent nodeksi yleimpi node
     else:
-    	#etsi data['nodes'] listasta vanhin parent, toka vanhin parent, jne... 
-    	depth = len(parentNodes)
-    	for currentDepth in range(depth):
-    		#eti parentin index: TODO KEKSI MITEN NAVIGOIN JSON DICT ARRAY HOMMAA JA PÄÄSEN KERROS KERRALLAAN LUOMAAN SEN
-    		idx = getParentIdx(data['nodes'])
+    	#ylemmän noden nimi on esim 0.1 tai 0 tai 0.1.40036, eli vika split '.', vika pois, ja '. takas'
+    	parentNode = '.'.join(fn.split('.')[:-1])
+    	newNode = Node(numberToAction(latestNode), id=fn, data=txtDataDict[fn], parent=nodeDict[parentNode])
+    
+    nodeDict[fn] = newNode
+
+#export to JSON
+exporter = JsonExporter(indent=2, sort_keys=True)
+print(exporter.export(root))
 
 
 
 
-print(data)
+
+
+
+
+
+
+
+
+    # print(strippedFn)
+    
+
+    # # jos ei vanhempia - parent nodeen
+    # if (len(parentNodes) == 0):
+    # 	data['nodes'].append({'id': currentNode, 'range': range, 'children': []})
+    # else:
+		#eti parentin index: TODO KEKSI MITEN NAVIGOIN JSON DICT ARRAY HOMMAA JA PÄÄSEN KERROS KERRALLAAN LUOMAAN SEN
+		# https://pypi.org/project/anytree/
+		# https://stackoverflow.com/questions/9618862/how-to-parse-a-directory-structure-into-dictionary
+
+
+
+
+
+
+#print(data)
 
 
 

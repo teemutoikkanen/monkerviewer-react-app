@@ -24,7 +24,7 @@ export default function RecursiveTreeView(props) {
 
   const renderTree = (nodes) => (
     <TreeItem key={nodes.id} nodeId={nodes.id} label={nodes.name} data = {nodes.data} children = {nodes.children}
-      onLabelClick={() => props.handleOnLabelClick(nodes.id, nodes.name, nodes.data)} onIconClick={() => props.handleOnLabelClick(nodes.id, nodes.name, nodes.data, nodes.children)}>
+      onLabelClick={() => props.handleOnLabelClick(nodes.id, nodes.name, nodes.data, nodes.children)} onIconClick={() => props.handleOnLabelClick(nodes.id, nodes.name, nodes.data,nodes.children)}>
       {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
     </TreeItem>
   );

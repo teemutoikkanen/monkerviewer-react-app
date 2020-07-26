@@ -8,13 +8,13 @@ import tempTreeData from '../../temp/test-data.json'
 function App() {
 
   const [tree, setTree] = useState(tempTreeData);
-  const [currentNode, setCurrentNode] = useState("");
-  const [rangeData, setRangeData] = useState([]);
+  // const [currentNode, setCurrentNode] = useState("");
+  const [currentChildrenNodes, setCurrentChildrenNodes] = useState([]);
 
 
   const handleOnMuiTreeLabelClick = (id, name, data, children) => {
-    setCurrentNode(id) 
-    setRangeData(children)
+    // setCurrentNode(id) 
+    setCurrentChildrenNodes(children)
 
     
     // children.map((childNode, idx) => {
@@ -32,7 +32,7 @@ function App() {
         <MuiTreeView tree={tempTreeData} handleOnLabelClick={handleOnMuiTreeLabelClick} />  
       </div>
       <div className ='RangeTable'>
-        <RangeTable rangeData={rangeData} />
+        <RangeTable currentChildrenNodes={currentChildrenNodes} />
       </div>
               
     </div>

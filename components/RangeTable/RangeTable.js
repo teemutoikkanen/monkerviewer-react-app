@@ -180,6 +180,12 @@ export default function RangeTable(props) {
 
     //todo populate props.rangeData to table background colors
 
+    //https://stackoverflow.com/questions/8541081/css-set-a-background-color-which-is-50-of-the-width-of-the-window
+
+    
+    props.rangeData.forEach((childNode,idx) => {
+      console.log(childNode)
+    })
     
     return (
         <div>

@@ -14,9 +14,6 @@ function App() {
 
   const handleOnMuiTreeLabelClick = (id, name, data, children) => {
     setCurrentNode(id) 
-    console.log(id, tree)
-    console.log(children)
-
     setRangeData(children)
 
     
@@ -31,6 +28,7 @@ function App() {
   return (
     <div className="App">
       <div className="DropDownTree">
+        3-way 20bb /w 1bb ante incl limps test0
         <MuiTreeView tree={tempTreeData} handleOnLabelClick={handleOnMuiTreeLabelClick} />  
       </div>
       <div className ='RangeTable'>

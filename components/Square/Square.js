@@ -2,6 +2,7 @@ import React from 'react';
 
 
 function Square(props) {
+    // console.log(props.value, props.bgc);
     return (
         <button
         className="square"

@@ -173,137 +173,113 @@ const combosWoSuits = [
   "22",
 ];
 
-const colors = ["green","yellow","orange","red"]
+const colorDictionary = {
+  fold: "blue",
+  call: "green",
+  "all-in": "red",
+  raise: "orange",
+  //
+};
 
 export default function RangeTable(props) {
+  // muutujien alustusta
   const rowIndicesArray = [...Array(13).keys()];
-  const bgc = "white";
-
-
-  let finalDataArray = combosWoSuits.map((combo, idx) => {
-    return  {
-      combo: combo,
-      frequencies: [],
-      actions: [],
-      colors: [],
-      evs: [],
-    };
-  });
-
-  // actionit child nodeista talteen, mitä varten?
-  // let actions = []
+  let bgcArr = Array(13 * 13).fill("pink");
   
-  //loop jokainen child node eli action ja data
-  props.currentChildrenNodes.forEach((childNode, idx) => {
-    const tempDataArr = childNode.data.split("\n");
 
-    //current actions data array tässä muodossa 0: {combo: "AA", freq: "0.0", ev: "-1000.0"}
-    let curActionComboFreqEvArray = [];
-    let curAction = childNode.name;
-    // actions.push(curAction)
+  //tarkistetaan heti onko reissukokoja yli 1, jos on niin ei-standardi värit
 
-    tempDataArr.forEach((val, idx) => {
-      if (idx % 2 == 0 && idx <= 336) {
-        let tempObj = {
-          combo: val,
-          freq: tempDataArr[idx + 1].split(";")[0],
-          ev: tempDataArr[idx + 1].split(";")[1],
-        };
-        curActionComboFreqEvArray.push(tempObj);
+  let nRaise = 0;
+  if (nRaise > 1) {
+    //todo tee taikoja colorDictillä, helpoin luoda vaan uudet jokaselle nRaise = 2, 3 ,4 jne..
+    alert("nRaise > 1 !!! ", nRaise);
+  }
+
+  //1. LOOPATAAN JOKAINEN CHILD NODE -> YHTEEN ARRAYHYN KAIKKI TARVITTAVA DATA finalDataArray
+  if (props.currentChildrenNodes) {
+    let finalDataArray = combosWoSuits.map((combo, idx) => {
+      return {
+        combo: combo,
+        frequencies: [],
+        actions: [],
+        colors: [],
+        evs: [],
+      };
+    });
+    props.currentChildrenNodes.forEach((childNode, idx) => {
+      if (childNode.name.split(" ")[1] === "raise") {
+        nRaise += 1;
       }
     });
-    // console.log(curAction, curActionComboFreqEvArray);
 
-    //yhdistetään 2-5 kpl (curAction, curActionComboFreqEvArray) yhteen comboStrategyFreqColEvArray
-    [...finalDataArray].forEach((val,idx) => {
-      curActionComboFreqEvArray.forEach((curActionVal, curActionIdx) => {
-        
-        try {
-          if (val.combo === curActionVal.combo) {
-            finalDataArray[idx].frequencies.push(curActionVal.freq);
-            finalDataArray[idx].evs.push(curActionVal.ev);
-            finalDataArray[idx].actions.push(curAction);
+    props.currentChildrenNodes.forEach((childNode, idx) => {
+      // apuarray, että saadaan n eri actionista data yhteen arrayhyn, lähinnä jos yksittäisen combo mixaa
+      const tempDataArr = childNode.data.split("\n");
+      let curActionComboFreqEvArray = [];
+      let curAction = childNode.name;
+
+      tempDataArr.forEach((val, idx) => {
+        if (idx % 2 === 0 && idx <= 336) {
+          //jos freq > 0, otetaan data talteen
+          if (tempDataArr[idx + 1].split(";")[0] > 0) {
+            let tempObj = {
+              combo: val,
+              freq: tempDataArr[idx + 1].split(";")[0],
+              ev: tempDataArr[idx + 1].split(";")[1],
+            };
+            curActionComboFreqEvArray.push(tempObj);
           }
         }
-        catch(e) {
-          console.log(e)
-        }
-        
-      })
-    })
-  });
-  
-  console.log(finalDataArray);
-  //TODO next  comboStrategyFreqColEvArray datasta visualisointi: background color logiikka, pinta-ala juttu, Square toiminta
+      });
 
-  // sorttaa comboStrategyFreqColEvArray samalla tavalla kun squaret täytetään
-  // getColors curAcctionsien avulla ["red", "yellow", "orange"] esim
-  // bgc = "linear-gradient(90deg, pink 50%, cyan 50%)"
-  // const bgcArr = finalDataArray.map((val,idx) => {
-  //   return (
-  //     actions.forEach((action,aIdx) => {
-        
-  //     })
-  //   )
-    
-  // })
+      //yhdistetään 2-5 kpl (curAction, curActionComboFreqEvArray) yhteen finalDataArray
+      [...finalDataArray].forEach((val, idx) => {
+        curActionComboFreqEvArray.forEach((curActionVal, curActionIdx) => {
+          try {
+            if (val.combo === curActionVal.combo) {
+              finalDataArray[idx].frequencies.push(curActionVal.freq);
+              finalDataArray[idx].evs.push(curActionVal.ev);
+              finalDataArray[idx].actions.push(curAction);
+              finalDataArray[idx].colors.push(
+                colorDictionary[curAction.split(" ")[1]]
+              );
+            }
+          } catch (e) {
+            console.log(e);
+          }
+        });
+      });
+    });
 
-  function getBgc(i) {
+    console.log("finalDataArray", finalDataArray);
 
-    let usedActionsAndFreqs = [];
-    let colors = [];
+    finalDataArray.forEach((comboObject, idx) => {
+      if (comboObject.colors.length <= 1) {
+        bgcArr[idx] = comboObject.colors[0];
+        console.log(comboObject, comboObject.colors[0]);
+      } else {
+        let prevFreqSum = 0;
+        let bgcStr = "linear-gradient(to right";
+        //todo .map pois .foreach tilalle
+        const linGrad2dimArray = comboObject.frequencies.map((freq, idx) => {
+          //MUOKATAAN FREQKVENSSIT linear-gradient css sopivaan muotoon
+          //comboObject.frequencies = [0.1 0.6 0.3] nyt. luo näistä esim [[0 10] [10 70] [70 100]]
+          const v1 = prevFreqSum * 100;
+          const v2 = (prevFreqSum + parseFloat(freq)) * 100;
 
-    //for each non 0 frequency save action ja sit vast mietin värit
-    try {
-      finalDataArray[i].frequencies.forEach((val,idx) => {
-        console.log("finalDataArray[i].frequencies.forEach((val ",val)
-        if (val !== "0.0") {
-          console.log("found !== 0.0 ", val)
-          console.log("adding ", finalDataArray[i].actions[idx], finalDataArray[i].frequencies[idx])
-          usedActionsAndFreqs.push({action: finalDataArray[i].actions[idx], freq: finalDataArray[i].frequencies[idx]});
-        }
-      })
-  
-      console.log("usedActionsAndFreqs",usedActionsAndFreqs)
-      //for each 0-freq action (& freq)  --> pick a color
-      usedActionsAndFreqs.forEach((val,idx) => {
-        console.log("undefined val.action?", val.action)
-        if (val.action.split(" ")[1] === "raise") {
-          colors.push("orange");
-        }
-        else if (val.action.split(" ")[1] === "call") {
-          colors.push("green");
-        }
-        else if (val.action.split(" ")[1] === "all-in") {
-          colors.push("red");
-        }
-        else if (val.action.split(" ")[1] === "fold") {
-          colors.push("blue");
-        }
-      })
-  
-      //make css style str from colors []
-  
-      if (colors.length == 1) {
-        return colors[0]
+          prevFreqSum += parseFloat(freq);
+
+          bgcStr += ", " + comboObject.colors[idx] + " " + v1 + "% " + v2 + "%";
+
+          //todo poista return
+          return [Math.floor(v1), Math.floor(v2)];
+        });
+
+        bgcStr += ")";
+        bgcArr[idx] = bgcStr;
+        console.log(bgcStr)
       }
-      if (colors.length > 1) {
-        let bgcStr = "linear-gradient(90deg";
-        colors.forEach((val,idx) => {
-          bgcStr += ", " + val 
-          bgcStr += ((usedActionsAndFreqs.freq[idx])*100) + "%"
-  
-        })
-        bgcStr += ")"
-        return bgcStr
-      }
-
-    }
-    catch(e) {
-      console.log(e)
-    }
-    
-
+    });
   }
 
   return (
@@ -316,7 +292,7 @@ export default function RangeTable(props) {
               return (
                 <Square
                   value={combosWoSuits[i]}
-                  bgc={getBgc(i)}
+                  bgc={bgcArr[i]}
                   // onMouseDown={() => props.onMouseDown(i)}
                   // onMouseOver={e => props.onMouseOver(i, e)}
                 />

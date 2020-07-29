@@ -79,9 +79,13 @@ def getNodeFreq(data):
 
 def main():
 
+    print("enter file name incl .json")
+    newFn = input()
+    print("ok, loading probably..")
+
     #inits, vars
     range = 'AK+ QQ'
-    dir = './20bb'
+    dir = './30bb'
     root = Node(dir, id = 'root')
     nodeDict = {}
     txtDataDict = {}
@@ -129,7 +133,15 @@ def main():
 
     #export to JSON
     exporter = JsonExporter(indent=2, sort_keys=True)
-    print(exporter.export(root))
+
+
+    file = open(newFn, "w")
+    file.write(exporter.export(root))
+    file.close()
+
+    #print(exporter.export(root))
+
+
 
 
 

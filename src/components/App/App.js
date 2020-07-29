@@ -4,8 +4,9 @@ import MuiTreeView from '../MuiTreeView/MuiTreeView'
 import RangeTable from '../RangeTable/RangeTable'
 import parseTreeData from '../../utils/parseTreeData'
 import ActionButton from '../ActionButton/ActionButton'
+import MouseOverPopover from '../MouseOverPopover/MouseOverPopover'
 
-import tempTreeData from '../../temp/test-data.json'
+import tempTreeData from '../../temp/30bb8max.json'
 
 const colorDictionary = {
   fold: "rgb(109, 162, 193)",

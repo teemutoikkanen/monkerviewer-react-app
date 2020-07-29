@@ -183,6 +183,8 @@ const combosWoSuits = [
 export default function parseTreeData(props) {
       // muutujien alustusta
   let bgcArr = Array(13 * 13).fill(colorDictionary['empty']);
+
+  let curActionBgcArr = []
   
 
   //tarkistetaan heti onko reissukokoja yli 1, jos on niin ei-standardi värit

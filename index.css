@@ -16,7 +16,7 @@ ul {
 }
 
 
-.square, .specificCombosSquare {
+.square, .specificCombosSquare, .ActionButton {
   background: #fff;
   border: 1px solid #999;
   float: left;

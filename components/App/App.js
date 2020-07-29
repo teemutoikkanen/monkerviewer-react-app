@@ -3,27 +3,20 @@ import './App.css';
 import MuiTreeView from '../MuiTreeView/MuiTreeView'
 import RangeTable from '../RangeTable/RangeTable'
 
-import tempTreeData from '../../temp/test-data.json'
+import tempTreeData from '../../temp/100bb-bvb.json'
 
 function App() {
 
   const [tree, setTree] = useState(tempTreeData);
-  // const [currentNode, setCurrentNode] = useState("");
   const [currentChildrenNodes, setCurrentChildrenNodes] = useState([]);
 
-
   const handleOnMuiTreeLabelClick = (id, name, data, children) => {
-    // setCurrentNode(id) 
-    setCurrentChildrenNodes(children)
 
-    
-    // children.map((childNode, idx) => {
-    //   console.log(childNode.data)
-    // })
-
+    if (children) {
+      setCurrentChildrenNodes(children)
+    }
     
   }
-  // setTree(tempTreeData);
 
   return (
     <div className="App">

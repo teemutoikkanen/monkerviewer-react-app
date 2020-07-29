@@ -8,27 +8,42 @@ def threeDigitToPercentage(val):
 		return val[1:] + "%"
 	return val + "%"
 
+
+# 	If it starts with 40, the next 3 numbers are the raise size in %, otherwise:
+
+# 0 = Fold
+# 1 =  Call
+# 2 = Pot
+# 3 = All In
+# 4 = Half Pot
+# 9 = 75% Pot
+# or
+# Number - 11 = Raise Size
 def numberToAction(latestNode):
 	if latestNode == '0':
 		return 'fold'
-	if latestNode == '1':
+	elif latestNode == '1':
 		return 'call'
-	if latestNode[:2] == '40':
+	elif latestNode == '2':
+		return 'raise 100% pot'
+	elif (latestNode[:2] == '40' and len(latestNode) == 5):
 		return 'raise ' + str(threeDigitToPercentage(latestNode[2:]))
-	if latestNode == '3':
+	elif latestNode == '3':
 		return 'all-in'
-	if latestNode == '9':
-		return 'raise (9 bug?)'
-	if latestNode == '6':
+	elif latestNode == '4':
+		return 'raise 50% pot'
+	elif latestNode == '9':
+		return 'raise 75% pot'
+	elif latestNode == '6':
 		return 'min-raise'
-	if (latestNode[0] == '1' and len(latestNode) >= 2):
+	elif (latestNode[0] == '1' and len(latestNode) >= 2):
 		raiseInChips = int(latestNode[1:]) + 1
-		return 'raise to ' + str(raiseInChips) + ' chips'
-	return latestNode
-
+		return 'raise ' + str(raiseInChips)
+	else:
+		return "raise " + str(float(latestNode) - 11)
 
 def getPositionList(n_players):
-	position_list = ["utg9","utg8","utg7","lj","hj","co","btn","sb","bb"]
+	position_list = ["UTG9","UTG8","UTG7","LJ","HJ","CO","BTN","SB","BB"]
 	return position_list[(9-n_players):]
 
 def getPosition(fn,n_players):
@@ -37,6 +52,28 @@ def getPosition(fn,n_players):
 
 		#3 kätisessä esim 1.3.40367.1 -> pos on btn->sb->bb-----> BTN
 
+def getNodeFreq(data):
+
+		nCombosNl = 1326
+		tempDataArr = data.split("\n")
+		freqSum = 0
+		for i in range(len(tempDataArr)):
+			if (i % 2 == 0 and i <= 336):
+				#jos offari
+				if (len(tempDataArr[i]) > 2 and tempDataArr[i][2] == 'o'):
+					freqSum += float(tempDataArr[i+1].split(";")[0])*12
+				#jos pari
+				if (len(tempDataArr[i]) == 2 and tempDataArr[i][0] == tempDataArr[i][1]):
+					freqSum += float(tempDataArr[i+1].split(";")[0])*6
+				#jos suittari
+				if (len(tempDataArr[i]) > 2 and tempDataArr[i][2] == 's'):
+					freqSum += float(tempDataArr[i+1].split(";")[0])*4
+
+		return freqSum/nCombosNl		
+
+
+
+
 
 
 
@@ -44,9 +81,9 @@ def main():
 
 	#inits, vars
 	range = 'AK+ QQ'
-	root = Node("root", id = 'root')
+	dir = './100bb-bvb'
+	root = Node(dir, id = 'root')
 	nodeDict = {}
-	dir = './20bb'
 	txtDataDict = {}
 	n_players = 0
 
@@ -75,14 +112,17 @@ def main():
 
 	    pos = getPosition(fn, n_players)
 
+	    freq = getNodeFreq(txtDataDict[fn]);
+	    # print(pos,latestNode,freq)
+
 	    #jos eka pelaaja -> parent nodeksi 'root'
 	    if len(fn.split('.')) <= 1:
-	    	newNode = Node(pos + " " + numberToAction(latestNode), id=fn, data=txtDataDict[fn], position=pos, parent=root)
+	    	newNode = Node(pos + " " + numberToAction(latestNode), id=fn, data=txtDataDict[fn], position=pos, parent=root,freq=freq)
 	    #muuten parent nodeksi yleimpi node
 	    else:
 	    	#ylemmän noden nimi on esim 0.1 tai 0 tai 0.1.40036, eli vika split '.', vika pois, ja '. takas'
 	    	parentNode = '.'.join(fn.split('.')[:-1])
-	    	newNode = Node(pos + " " + numberToAction(latestNode), id=fn, data=txtDataDict[fn], position=pos, parent=nodeDict[parentNode])
+	    	newNode = Node(pos + " " + numberToAction(latestNode) + " (" + str(round(freq*100,2)) + "%)", id=fn, data=txtDataDict[fn], position=pos, parent=nodeDict[parentNode],freq=freq)
 	    
 	    nodeDict[fn] = newNode
 

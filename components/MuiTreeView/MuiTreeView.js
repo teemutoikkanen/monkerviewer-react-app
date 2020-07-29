@@ -4,8 +4,8 @@ import TreeView from '../../../node_modules/@material-ui/lab/TreeView';
 import ExpandMoreIcon from '../../../node_modules/@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '../../../node_modules/@material-ui/icons/ChevronRight';
 import TreeItem from '../../../node_modules/@material-ui/lab/TreeItem';
-
-
+import { blue } from '@material-ui/core/colors';
+import './MuiTreeView.css';
 
 
 const useStyles = makeStyles({
@@ -14,6 +14,10 @@ const useStyles = makeStyles({
     flexGrow: 1,
     maxWidth: 400,
   },
+
+  treeNodeClassTest: {
+    "background-color": blue,
+  }
 });
 
 

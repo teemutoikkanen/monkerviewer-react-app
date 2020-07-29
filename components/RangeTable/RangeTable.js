@@ -174,17 +174,18 @@ const combosWoSuits = [
 ];
 
 const colorDictionary = {
-  fold: "blue",
-  call: "green",
-  "all-in": "red",
-  raise: "orange",
+  fold: "rgb(109, 162, 193)",
+  call: "	rgb(142, 188, 139)",
+  "all-in": "rgb(183, 73, 36)",
+  raise: "rgb(234, 150, 122)",
+  empty: "rgb(119, 119, 119)"
   //
 };
 
 export default function RangeTable(props) {
   // muutujien alustusta
   const rowIndicesArray = [...Array(13).keys()];
-  let bgcArr = Array(13 * 13).fill("pink");
+  let bgcArr = Array(13 * 13).fill(colorDictionary['empty']);
   
 
   //tarkistetaan heti onko reissukokoja yli 1, jos on niin ei-standardi värit
@@ -254,9 +255,9 @@ export default function RangeTable(props) {
     console.log("finalDataArray", finalDataArray);
 
     finalDataArray.forEach((comboObject, idx) => {
-      if (comboObject.colors.length <= 1) {
-        bgcArr[idx] = comboObject.colors[0];
-        console.log(comboObject, comboObject.colors[0]);
+      if (comboObject.colors.length > 1000) {
+        //TODO TÄÄ POIS JA AINA linear gradientil niin saa sen loppuharmaa bugin korjattua
+        // bgcArr[idx] = comboObject.colors[0];
       } else {
         let prevFreqSum = 0;
         let bgcStr = "linear-gradient(to right";
@@ -275,9 +276,13 @@ export default function RangeTable(props) {
           return [Math.floor(v1), Math.floor(v2)];
         });
 
+        //jos combosta ei nodessa enää osa oo mukana, niin väri menee silti 100% asti, eli jos prevFreqsum <= 1 niin lisää loppuun vielä harmaa
+        if (prevFreqSum < 1) {
+          bgcStr += ", " + colorDictionary['empty'] + prevFreqSum*100 + "% 100%"
+          console.log(bgcStr)
+        }
         bgcStr += ")";
         bgcArr[idx] = bgcStr;
-        console.log(bgcStr)
       }
     });
   }

@@ -6,7 +6,7 @@ import parseTreeData from '../../utils/parseTreeData'
 import ActionButton from '../ActionButton/ActionButton'
 import MouseOverPopover from '../MouseOverPopover/MouseOverPopover'
 
-import tempTreeData from '../../temp/temp.json'
+import tempTreeData from '../../temp/fix.json'
 
 const colorDictionary = {
   fold: "rgb(109, 162, 193)",

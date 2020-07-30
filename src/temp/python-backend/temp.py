@@ -42,18 +42,40 @@ def numberToAction(latestNode):
     else:
         return "raise " + str(float(latestNode) - 11)
 
-def getPositionList(n_players):
+def getPositions(fn, n_players):
     position_list = ["UTG9","UTG8","UTG7","LJ","HJ","CO","BTN","SB","BB"]
     return position_list[(9-n_players):]
 
-def getPosition(fn,n_players):
-    position_list = getPositionList(n_players)
+# def getPosition(fn,n_players):
     
-    #TODO: en ota huomioon pelaan foldatessa miten vaikuttaa loppuihin actioneihin. esim 1.0.1 tässähän pelaaja tippuu pois ja pos list menee perseelleen
-    # --> pidä kirjaa active_positions_list tms
-    return position_list[len(fn.split('.')) % n_players - 1]
+#     position_list = getPositionList(fn, n_players)
+#     return position_list[len(fn.split('.')) % n_players - 1]
 
-    #3 kätisessä esim 1.3.40367.1 -> pos on btn->sb->bb-----> BTN
+def getPosition(fn, n_players):
+    #for each action, step forward
+    activePositionsList = getPositions(fn, n_players)
+    j = 0
+    foldedPositions = []
+    actionList = fn.split('.')
+    for i in range(len(actionList)):
+        curPos = activePositionsList[i % n_players]
+
+        if (curPos in foldedPositions):
+            j += 1
+        if (actionList[i] == '0'):
+            foldedPositions.append(curPos)
+
+
+        #print(activePositionsList[i % n_players])
+    
+    return activePositionsList[(i+j) % n_players]
+
+
+
+
+        #if action == 0, step forward and remove current pos from pos list
+
+
 
 def getNodeFreq(data):
 
@@ -136,13 +158,20 @@ def main():
         f.close()
 
 
+    
     #looppaa jokainen node, jokaisen noden uniikki id lista nykyisestä kohtaa pelipuuta, esim ["0", "1"]
     for fn in sorted(filenames, key=lambda fn: len(fn.split('.'))):
 
         fn = fn.strip(".rng")
         latestNode = fn.split('.')[-1]
 
+        
+
+        # oikee positio saadaan aina fn ja n_players avulla
         pos = getPosition(fn, n_players)
+        
+
+        # pos = getPosition(fn, n_players)
 
         freq = getNodeFreq(txtDataDict[fn]);
         # print(pos,latestNode,freq)
@@ -180,3 +209,7 @@ def main():
 if __name__ == '__main__':
     main()
     # print(threeDigitToPercentage("125"))
+
+
+    #print('result',getPosition("3.0.1.3.1", 4))
+    

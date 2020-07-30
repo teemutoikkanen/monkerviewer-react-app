@@ -48,6 +48,9 @@ def getPositionList(n_players):
 
 def getPosition(fn,n_players):
     position_list = getPositionList(n_players)
+    
+    #TODO: en ota huomioon pelaan foldatessa miten vaikuttaa loppuihin actioneihin. esim 1.0.1 tässähän pelaaja tippuu pois ja pos list menee perseelleen
+    # --> pidä kirjaa active_positions_list tms
     return position_list[len(fn.split('.')) % n_players - 1]
 
     #3 kätisessä esim 1.3.40367.1 -> pos on btn->sb->bb-----> BTN
@@ -72,6 +75,31 @@ def getNodeFreq(data):
     return freqSum/nCombosNl
 
 
+#
+def getActionsList(fn, n_players):
+    actionNumberList = fn.split('.')
+    actionsList = []
+    for i in range(len(actionNumberList)):
+        action = numberToAction(actionNumberList[i])
+        # print("fn", fn)
+        # print("action", action)
+        # print("actionNumberList[i]", actionNumberList[i])
+        
+        currentPosFn = fn
+        if (len(actionNumberList) > 1 ):
+            currentPosFn = '.'.join(actionNumberList[:(i+1)])
+        
+
+
+        print("fn", fn)
+        print("i", i)
+        print("currentPosFn",currentPosFn)
+        pos = getPosition(currentPosFn,n_players)
+        
+        actionsList.append(pos + " " + action)
+
+    return actionsList
+
 
 
 
@@ -85,7 +113,7 @@ def main():
 
     #inits, vars
     range = 'AK+ QQ'
-    dir = './30bb'
+    dir = './20bb'
     root = Node(dir, id = 'root')
     nodeDict = {}
     txtDataDict = {}
@@ -119,6 +147,9 @@ def main():
         freq = getNodeFreq(txtDataDict[fn]);
         # print(pos,latestNode,freq)
 
+        #tallennetaan jokaiseen nodeen lista siihenastisista nodejen actioneista
+        actionsList = getActionsList(fn, n_players) 
+
         parentNode = ""
         #jos eka pelaaja -> parent nodeksi 'root'
         if len(fn.split('.')) <= 1:
@@ -128,19 +159,20 @@ def main():
             #ylemmän noden nimi on esim 0.1 tai 0 tai 0.1.40036, eli vika split '.', vika pois, ja '. takas'
             parentNode = nodeDict['.'.join(fn.split('.')[:-1])]
 
-        newNode = Node(pos + " " + numberToAction(latestNode) + " (" + str(round(freq*100,2)) + "%)", id=fn, data=txtDataDict[fn], position=pos, parent=parentNode,freq=freq)
+            
+
+        newNode = Node(actionsList[-1] + " (" + str(round(freq*100,2)) + "%)", id=fn, data=txtDataDict[fn], position=pos, parent=parentNode,freq=freq,actionsList=actionsList)
         nodeDict[fn] = newNode
 
     #export to JSON
     exporter = JsonExporter(indent=2, sort_keys=True)
-
-
+    
+    # save to file
     file = open(newFn, "w")
     file.write(exporter.export(root))
     file.close()
 
-    #print(exporter.export(root))
-
+    
 
 
 

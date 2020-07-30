@@ -6,7 +6,7 @@ import parseTreeData from '../../utils/parseTreeData'
 import ActionButton from '../ActionButton/ActionButton'
 import MouseOverPopover from '../MouseOverPopover/MouseOverPopover'
 
-import tempTreeData from '../../temp/30bb8max.json'
+import tempTreeData from '../../temp/temp.json'
 
 const colorDictionary = {
   fold: "rgb(109, 162, 193)",
@@ -26,6 +26,15 @@ function App() {
 
   if (currentChildrenNodes[0]) {
     RangeTableTitle = currentChildrenNodes[0].position + " Strategy";
+
+    if (currentChildrenNodes[0].actionsList) {
+      RangeTableTitle += " vs. "
+      currentChildrenNodes[0].actionsList.slice(0,-1).forEach((val,idx) => {
+        RangeTableTitle += val + " "
+      })
+
+    }
+    
   }
 
   const handleOnMuiTreeLabelClick = (id, name, data, children) => {

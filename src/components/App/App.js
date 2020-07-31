@@ -5,8 +5,18 @@ import RangeTable from '../RangeTable/RangeTable'
 import parseTreeData from '../../utils/parseTreeData'
 import ActionButton from '../ActionButton/ActionButton'
 import MouseOverPopover from '../MouseOverPopover/MouseOverPopover'
+import TreeSelector from '../TreeSelector/TreeSelector'
 
-import tempTreeData from '../../temp/fix.json'
+
+import bb15tree from '../../temp/python-backend/15bb.json'
+import bb30tree from '../../temp/python-backend/30bb.json'
+// import bb60tree from '../../temp/python-backend/bb60.json'
+
+const treeDict = {
+  bb15: bb15tree,
+  bb30: bb30tree,
+  // bb60: bb60tree
+}
 
 const colorDictionary = {
   fold: "rgb(109, 162, 193)",
@@ -19,7 +29,7 @@ const colorDictionary = {
 
 function App() {
 
-  const [tree, setTree] = useState(tempTreeData);
+  const [tree, setTree] = useState(bb30tree);
   const [currentChildrenNodes, setCurrentChildrenNodes] = useState([]);
 
   let RangeTableTitle = ""
@@ -27,9 +37,9 @@ function App() {
   if (currentChildrenNodes[0]) {
     RangeTableTitle = currentChildrenNodes[0].position + " Strategy";
 
-    if (currentChildrenNodes[0].actionsList) {
+    if (currentChildrenNodes[0].actionList) {
       RangeTableTitle += " vs. "
-      currentChildrenNodes[0].actionsList.slice(0,-1).forEach((val,idx) => {
+      currentChildrenNodes[0].actionList.slice(0,-1).forEach((val,idx) => {
         RangeTableTitle += val + " "
       })
 
@@ -45,16 +55,19 @@ function App() {
     
   }
 
+  const handleTreeSelectorOnClick = (key) => {
+    setTree(treeDict[key])
+  }
+
   const bgcArr = parseTreeData({currentChildrenNodes})
-  console.log(bgcArr)
 
-
+  console.log("Object.keys(treeDict)",Object.keys(treeDict))
   //TODO forEach child render action-nappula /w freq
   return (
     <div className="App">
       <div className="DropDownTree">
         Game Tree 
-        <MuiTreeView tree={tempTreeData} handleOnLabelClick={handleOnMuiTreeLabelClick} />  
+        <MuiTreeView tree={tree} handleOnLabelClick={handleOnMuiTreeLabelClick} />  
       </div>
       <div className ='RangeTable'>
         {RangeTableTitle}
@@ -67,6 +80,22 @@ function App() {
           );
         })}
       </div>
+      todooo: betsikokojen varmistusta, server side data isommille puille?, ev/freq popup, pöytäanimaatio + painettavat napit
+      </div>
+      <div className='TreeSelector'>
+        {/* <TreeSelector handleTreeSelectorOnClick={handleTreeSelectorOnClick} treeDict={treeDict}></TreeSelector> */}
+      </div>
+      <div className = 'TreeSelector'>
+            {Object.keys(treeDict).map((key) => {
+                return (
+                    <button bgc = 'white' onClick = {() => handleTreeSelectorOnClick(key)}>{key}</button>
+
+                )
+            })}
+        </div>
+      
+      <div>  
+        
       </div>
       
               

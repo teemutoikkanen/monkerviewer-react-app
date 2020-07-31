@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     height: 110,
     flexGrow: 1,
     maxWidth: 400,
-    "margin-right": 100
+    "margin-right": 50
   },
 
   treeNodeClassTest: {

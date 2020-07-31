@@ -251,7 +251,6 @@ export default function parseTreeData(props) {
       });
     });
 
-    console.log("finalDataArray", finalDataArray);
 
     finalDataArray.forEach((comboObject, idx) => {
       if (comboObject.colors.length > 1000) {
@@ -278,7 +277,6 @@ export default function parseTreeData(props) {
         //jos combosta ei nodessa enää osa oo mukana, niin väri menee silti 100% asti, eli jos prevFreqsum <= 1 niin lisää loppuun vielä harmaa
         if (prevFreqSum < 1) {
           bgcStr += ", " + colorDictionary['empty'] + prevFreqSum*100 + "% 100%"
-          console.log(bgcStr)
         }
         bgcStr += ")";
         bgcArr[idx] = bgcStr;

@@ -9,12 +9,17 @@ import TreeSelector from '../TreeSelector/TreeSelector'
 
 
 import bb15tree from '../../temp/python-backend/15bb.json'
+import bb20tree from '../../temp/python-backend/20bb.json'
 import bb30tree from '../../temp/python-backend/30bb.json'
+// import bb40tree from '../../temp/python-backend/40bb.json'
 // import bb60tree from '../../temp/python-backend/bb60.json'
 
 const treeDict = {
   bb15: bb15tree,
+  bb20: bb20tree,
   bb30: bb30tree,
+ // bb40: bb40tree,
+  
   // bb60: bb60tree
 }
 
@@ -80,7 +85,7 @@ function App() {
           );
         })}
       </div>
-      todooo: betsikokojen varmistusta, server side data isommille puille?, ev/freq popup, pöytäanimaatio + painettavat napit
+      todooo: puunavigointi selkeemmäks: tuplaklick sulkeminen, ulkoasu nuolet yms, vertaa parempiin, muita vaihtoehtoja?, betsikokojen varmistusta, server side data isommille puille?, ev/freq popup, pöytäanimaatio + painettavat napit
       </div>
       <div className='TreeSelector'>
         {/* <TreeSelector handleTreeSelectorOnClick={handleTreeSelectorOnClick} treeDict={treeDict}></TreeSelector> */}

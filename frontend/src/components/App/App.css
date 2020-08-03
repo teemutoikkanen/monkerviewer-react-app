@@ -1,0 +1,36 @@
+/* .App {
+    display: flex;
+    justify-content: space-around
+} */
+
+p.MuiTypography-root.MouseOverComboFont.MuiTypography-body1 {
+    line-height: 2;
+}
+.treeSelectorBtn {
+    width: 300px;
+}
+
+.TreeSelector {
+    display:flex;
+    flex-direction: column;
+
+}
+.DropDownTree {
+    position: fixed;
+   
+}
+.RangeTable {
+    position:fixed;
+    margin-left:350px;
+    z-index: -1;
+}
+
+.TreeSelector {
+    position:fixed;
+    margin-left:850px;
+}
+
+.ActionBoxesContainer {
+    display:flex
+}
+

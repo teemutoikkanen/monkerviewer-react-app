@@ -1,0 +1,17 @@
+cocker-compose teemu qweasd ei toiminu
+root on kai edelleen admin password
+
+
+
+non-root mongo user: teemu windowsxp
+Successfully added user: {
+        "user" : "teemu",
+        "roles" : [
+                {
+                        "role" : "readWrite",
+                        "db" : "webApp"
+                }
+        ]
+}
+>
+>

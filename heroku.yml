@@ -1,5 +1,5 @@
 build:
   docker:
-    web: frontend/Dockerfile
+    web: frontend/Dockerfile-prod
 run:
   web: docker-compose -f docker-compose-prod.yml up --build

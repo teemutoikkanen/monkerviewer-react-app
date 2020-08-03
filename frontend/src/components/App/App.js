@@ -7,7 +7,6 @@ import ActionButton from '../ActionButton/ActionButton'
 import MouseOverPopover from '../MouseOverPopover/MouseOverPopover'
 import TreeSelector from '../TreeSelector/TreeSelector'
 
-import jsondata15bb from "../../trees/15bb.json"
 import jsondata20bb3way050bbante from "../../trees/20bb-3way-050bbante.json"
 import jsondata20bb3way1bbante from "../../trees/20bb-3way-1bbante.json"
 import jsondata20bb from "../../trees/20bb.json"
@@ -16,7 +15,6 @@ import jsondata4wayicm5leftco30btn26sb10bb20 from "../../trees/4way-icm5left-co3
 
 
 const treeDict = { 
-jsondata15bb: jsondata15bb, 
 jsondata20bb3way050bbante: jsondata20bb3way050bbante, 
 jsondata20bb3way1bbante: jsondata20bb3way1bbante, 
 jsondata20bb: jsondata20bb, 
@@ -35,7 +33,7 @@ const colorDictionary = {
 
 function App() {
 
-  const [tree, setTree] = useState(jsondata15bb);
+  const [tree, setTree] = useState(jsondata20bb3way1bbante);
   const [currentChildrenNodes, setCurrentChildrenNodes] = useState([]);
 
   let RangeTableTitle = ""

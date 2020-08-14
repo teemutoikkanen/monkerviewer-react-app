@@ -11,7 +11,9 @@ import jsondata20bb3way050bbante from "../../trees/20bb-3way-050bbante.json"
 import jsondata20bb3way1bbante from "../../trees/20bb-3way-1bbante.json"
 import jsondata20bb from "../../trees/20bb.json"
 import jsondata25bbbvb1bbante from "../../trees/25bb-bvb-1bbante.json"
-import jsondata4wayicm5leftco30btn26sb10bb20 from "../../trees/4way-icm5left-co30-btn26-sb10-bb20.json"
+import jsondata3way40bb80bb30bb from "../../trees/3way-40bb-80bb-30bb.json"
+import jsondata3wayfticm40bb80bb30bb from "../../trees/3way-ft-icm-40bb-80bb-30bb.json"
+import jsondata4wayicm5leftco30btn46sb23bb22 from "../../trees/4way-icm5left-co30-btn46-sb23-bb22.json"
 
 
 const treeDict = { 
@@ -19,7 +21,9 @@ jsondata20bb3way050bbante: jsondata20bb3way050bbante,
 jsondata20bb3way1bbante: jsondata20bb3way1bbante, 
 jsondata20bb: jsondata20bb, 
 jsondata25bbbvb1bbante: jsondata25bbbvb1bbante, 
-jsondata4wayicm5leftco30btn26sb10bb20: jsondata4wayicm5leftco30btn26sb10bb20
+jsondata3way40bb80bb30bb: jsondata3way40bb80bb30bb, 
+jsondata3wayfticm40bb80bb30bb: jsondata3wayfticm40bb80bb30bb, 
+jsondata4wayicm5leftco30btn46sb23bb22: jsondata4wayicm5leftco30btn46sb23bb22
 }
 
 const colorDictionary = {
